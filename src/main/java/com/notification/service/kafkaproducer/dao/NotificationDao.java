@@ -12,7 +12,7 @@ public interface NotificationDao extends JpaRepository<Notification, Long>{
 	
 	 @Query(value = "select n.id_notif,\r\n"
 	 		+ "n.date_notif,\r\n"
-	 		+ "n.libelle_notif,\r\n"
+	 		+ "n.libelle_notif,rep_chef,\r\n"
 	 		+ "n.nom,\r\n"
 	 		+ "n.type_notif,\r\n"
 	 		+ "n.cod_soc,\r\n"
@@ -28,7 +28,7 @@ public interface NotificationDao extends JpaRepository<Notification, Long>{
 	  public List<Notification>   getNotif(@Param("matChef") String matChef,@Param("codServ") String codServ);
 	 
 	 @Query(value = "select n.id_notif,\r\n"
-		 		+ "n.date_notif,\r\n"
+		 		+ "n.date_notif,rep_chef,\r\n"
 		 		+ "n.libelle_notif,\r\n"
 		 		+ "n.nom,\r\n"
 		 		+ "n.type_notif,\r\n"
@@ -46,8 +46,9 @@ public interface NotificationDao extends JpaRepository<Notification, Long>{
 	 
 	 @Query(value = "select count(counter)\r\n"
 		 		+ "  from notification_portail  \r\n"
-		 		+ "  where cod_soc=:codSoc and  id_reciver=:mat and etat_notif='N'", nativeQuery = true)
+		 		+ "  where cod_soc=:codSoc and  id_reciver=:mat ", nativeQuery = true)
 		  public Long   getcounter(@Param("mat") String matChef, @Param("codSoc") String codSoc);
+	 
 	 
 	 
 	 @Query(value = "select n.id_notif,\r\n"
@@ -77,9 +78,25 @@ public interface NotificationDao extends JpaRepository<Notification, Long>{
 	 		+ "n.counter,n.etat_notif,n.etat_notif_agent\r\n"
 	 		+ "  from notification_portail n \r\n"
 	 		+ " where\r\n"
-	 		+ " id_notif in ( select id_notif from notification_portail where  type_notif in ('Formation','Situation','Document') and etat_notif='N') \r\n"
+	 		+ " id_notif in ( select id_notif from notification_portail where  type_notif in ('PretAvance','Situation','Document') and etat_notif='N') \r\n"
 	 		+ " or \r\n"
-	 		+ " id_notif in ( select id_notif from notification_portail where  type_notif in ('PretAvance','Conge','Autorisation') and rep_chef='O')  ", nativeQuery = true)
+	 		+ " id_notif in ( select id_notif from notification_portail where  type_notif in ('Formation','Conge','Autorisation') and rep_chef='O')  ", nativeQuery = true)
 		  public List<Notification>  getNotifRh();
+		 
+	 
+	 
+	 @Query(value = "select n.id_notif,\r\n"
+	 		+ "n.date_notif,rep_chef,\r\n"
+	 		+ "n.libelle_notif,\r\n"
+	 		+ "n.nom,\r\n"
+	 		+ "n.type_notif,\r\n"
+	 		+ "n.cod_soc,\r\n"
+	 		+ "n.mat_pers,\r\n"
+	 		+ "n.id_sender,\r\n"
+	 		+ "n.id_reciver,\r\n"
+	 		+ "n.counter,n.etat_notif,n.etat_notif_agent\r\n"
+	 		+ "  from notification_portail n \r\n"
+	 		+ " where n.type_notif='PretAvance'", nativeQuery = true)
+		  public List<Notification>  getNotifRdddh();
 		 
 }

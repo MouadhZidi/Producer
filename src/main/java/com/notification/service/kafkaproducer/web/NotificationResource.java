@@ -55,6 +55,11 @@ NotificationDao dao;
 	public List<Notification> GETALLRh() {
 		return dao.getNotifRh();
 	}
+	
+	@GetMapping("/getnotifRhd")
+	public List<Notification> GETALLRhd() {
+		return dao.getNotifRdddh();
+	}
 	@GetMapping("/getnotifAgent/{matPers}/{codSoc}")
 	public List<Notification> GetNotifAgent( @PathVariable("matPers") String matPers,@PathVariable("codSoc") String codSoc) {
 		return dao.getNotifAgent(matPers,codSoc);
