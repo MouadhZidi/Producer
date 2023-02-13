@@ -1,6 +1,7 @@
 package com.notification.service.kafkaproducer.configurations;
 
 
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -38,7 +39,10 @@ public class KafkaProducerConfiguration {
 
         return props;
     }
-
+    @Bean
+    public NewTopic myTopic() {
+        return new NewTopic("my-topic", 3, (short) 1);
+    }
     @Bean
     public ProducerFactory<Integer, String> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());

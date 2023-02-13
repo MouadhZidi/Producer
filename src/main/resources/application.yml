@@ -22,6 +22,6 @@ springdoc:
 
 producer:
   kafka:
-    topic-name: notifff
+    topic-name: arabe
 
    
