@@ -65,8 +65,23 @@ public interface NotificationDao extends JpaRepository<Notification, Long>{
 		 		+ "n.id_reciver,\r\n"
 		 		+ "n.counter,n.etat_notif,n.etat_notif_agent\r\n"
 		 		+ "  from notification_portail n \r\n"
-		 		+ " where n.id_reciver=:mat and n.etat_notif='N' \r\n", nativeQuery = true)
+		 		+ " where ((n.id_reciver=:mat or  n.id_reciver is null)  and n.etat_notif='N') or type_notif='Evenement' \r\n", nativeQuery = true)
 		  public List<Notification>   getNotifByMat(@Param("mat") String matChef);
+	 @Query(value = "select n.id_notif,\r\n"
+		 		+ "n.date_notif,rep_chef,\r\n"
+		 		+ "n.libelle_notif,\r\n"
+		 		+ "n.nom,\r\n"
+		 		+ "n.type_notif,\r\n"
+		 		+ "(select p.nom_pers||' '||p.pren_pers from personnel p where p.cod_soc=n.cod_soc and p.mat_pers=n.mat_pers) libnomprenom,\r\n"
+
+		 		+ "n.cod_soc,\r\n"
+		 		+ "n.mat_pers,\r\n"
+		 		+ "n.id_sender,\r\n"
+		 		+ "n.id_reciver,\r\n"
+		 		+ "n.counter,n.etat_notif,n.etat_notif_agent\r\n"
+		 		+ "  from notification_portail n \r\n"
+		 		+ "where ((n.id_reciver=:mat or  n.id_reciver is null)  and n.etat_notif='N') or type_notif='Evenement'  \r\n", nativeQuery = true)
+		  public List<Notification>   getNotifByMatUtilisateur(@Param("mat") String mat);
 	 
 	 
 	 @Query(value = "select n.id_notif,\r\n"
@@ -82,9 +97,10 @@ public interface NotificationDao extends JpaRepository<Notification, Long>{
 	 		+ "n.counter,n.etat_notif,n.etat_notif_agent\r\n"
 	 		+ "  from notification_portail n \r\n"
 	 		+ " where\r\n"
-	 		+ " id_notif in ( select id_notif from notification_portail where  type_notif in ('PretAvance','Situation','Document') and etat_notif='N') \r\n"
+	 		+ " (id_notif in ( select id_notif from notification_portail where  type_notif in ('PretAvance','Situation','Document') and etat_notif='N') \r\n"
 	 		+ " or \r\n"
-	 		+ " id_notif in ( select id_notif from notification_portail where  type_notif in ('Formation','Conge','Autorisation') and rep_chef='O')  ", nativeQuery = true)
+	 		+ " id_notif in ( select id_notif from notification_portail where  type_notif in ('Formation','Congés','Autorisations') and rep_chef='O')) "
+	 , nativeQuery = true)
 		  public List<Notification>  getNotifRh();
 		 
 	 
@@ -117,6 +133,7 @@ public interface NotificationDao extends JpaRepository<Notification, Long>{
 		 		+ "  from notification_portail n \r\n"
 		 		+ " where n.cod_soc=:cod and n.id_reciver=:matpers", nativeQuery = true)
 	 public List <Notification> gethistoriquenotification(@Param("matpers")String mat,@Param("cod") String cod );
+	 
 	 @Query(value = "select n.id_notif,\r\n"
 		 		+ "n.date_notif,rep_chef,\r\n"
 		 		+ "n.libelle_notif,\r\n"
@@ -128,7 +145,21 @@ public interface NotificationDao extends JpaRepository<Notification, Long>{
 		 		+ "n.id_reciver,\r\n"
 		 		+ "(select p.nom_pers||' '||p.pren_pers from personnel p where p.cod_soc=n.cod_soc and p.mat_pers=n.id_sender) libnomprenom,\r\n"
 		 		+ "n.counter,n.etat_notif,n.etat_notif_agent\r\n"
-		 		+ "  from notification_portail n \r\n",nativeQuery = true)
+		 		+ "from notification_portail n \r\n",nativeQuery = true)
 	 public List <Notification> getall();
 		 
+	 
+	 @Query(value = "select n.id_notif,\r\n"
+	 		+ "        n.date_notif,rep_chef,\r\n"
+	 		+ "       n.libelle_notif,\r\n"
+	 		+ "        n.nom,\r\n"
+	 		+ "        n.type_notif,\r\n"
+	 		+ "        n.cod_soc,\r\n"
+	 		+ "        n.mat_pers,\r\n"
+	 		+ "        n.id_sender,\r\n"
+	 		+ "        n.id_reciver,\r\n"
+	 		+ "        (select p.nom_pers||' '||p.pren_pers from personnel p where p.cod_soc=n.cod_soc and p.mat_pers=n.id_sender) libnomprenom,\r\n"
+	 		+ "        n.counter,n.etat_notif,n.etat_notif_agent from notification_portail n\r\n"
+	 		+ "where n.type_notif = 'Evenement'",nativeQuery = true)
+	 public List <Notification> getEventNotification();
 }

@@ -31,6 +31,17 @@ public class NotificationEntiteSansNom {
 	private Long counter;
 	private String etat_notif;
 	private String etat_notif_agent;
+	private String rep_chef;
+	
+	
+	
+	
+	public String getRep_chef() {
+		return rep_chef;
+	}
+	public void setRep_chef(String rep_chef) {
+		this.rep_chef = rep_chef;
+	}
 	public Long getId_notif() {
 		return id_notif;
 	}
@@ -103,9 +114,13 @@ public class NotificationEntiteSansNom {
 	public void setEtat_notif_agent(String etat_notif_agent) {
 		this.etat_notif_agent = etat_notif_agent;
 	}
+	
+	public NotificationEntiteSansNom() {
+		super();
+	}
 	public NotificationEntiteSansNom(Long id_notif, Date date_notif, String libelle_notif, String nom,
 			String type_notif, String cod_soc, String mat_pers, String id_sender, String id_reciver, Long counter,
-			String etat_notif, String etat_notif_agent) {
+			String etat_notif, String etat_notif_agent, String rep_chef) {
 		super();
 		this.id_notif = id_notif;
 		this.date_notif = date_notif;
@@ -119,9 +134,7 @@ public class NotificationEntiteSansNom {
 		this.counter = counter;
 		this.etat_notif = etat_notif;
 		this.etat_notif_agent = etat_notif_agent;
-	}
-	public NotificationEntiteSansNom() {
-		super();
+		this.rep_chef = rep_chef;
 	}
 	
 

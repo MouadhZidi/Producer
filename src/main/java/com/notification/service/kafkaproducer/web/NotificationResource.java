@@ -33,19 +33,22 @@ NotificationEntiteSansNomdao dao2;
     public NotificationResource(NotificationService notificationService) {
         this.notificationService = notificationService;
     }
+    
+    @GetMapping("/getNotifByMatUtilisateur/{mat}")
+    public List<Notification>   getNotifByMatUtilisateur(@PathVariable String mat){
+		return dao.getNotifByMatUtilisateur(mat);}
 
     @PostMapping("/send")
-    public ResponseEntity<Void> sendNotification(@RequestBody Notification notification) {
+    public ResponseEntity<Void> sendNotification(@RequestBody NotificationEntiteSansNom notification) {
         notificationService.send(notification);
         return new ResponseEntity<>(HttpStatus.OK);
     }
    @GetMapping("/findall")
     public List<Notification> getall() {
 	return dao.getall();
-       
-       
   }
     
+   
 	@GetMapping("/getnotif/{matChef}/{codServ}")
 	public List<Notification> GETALLBY( @PathVariable("matChef") String matChef,@PathVariable("codServ") String codServ) {
 		return dao.getNotif(matChef,codServ);
@@ -53,6 +56,7 @@ NotificationEntiteSansNomdao dao2;
 	
 	@GetMapping("/getnotifByMat/{Mat}")
 	public List<Notification> GETALLBYMAT( @PathVariable("Mat") String Mat) {
+		System.out.println("Matricule : "+Mat);
 		return dao.getNotifByMat(Mat);
 	}
 	@GetMapping("/getnotifRh")
@@ -79,7 +83,7 @@ NotificationEntiteSansNomdao dao2;
 	 @CrossOrigin
 	  @PutMapping("/updateEtatNotif")
 		 
-	  public ResponseEntity<NotificationEntiteSansNom> updateUclt( @RequestBody Notification Ag) {
+	  public ResponseEntity<NotificationEntiteSansNom> updateUclt( @RequestBody NotificationEntiteSansNom Ag) {
 	  
 	     Optional<NotificationEntiteSansNom> AgData = dao2.findById(Ag.getId_notif());
 	    
@@ -96,15 +100,15 @@ NotificationEntiteSansNomdao dao2;
 	 @CrossOrigin
 	  @PutMapping("/updateEtatNotifChef")
 		 
-	  public ResponseEntity<Notification> updateEtatNotifAgentChef( @RequestBody Notification Ag) {
+	  public ResponseEntity<NotificationEntiteSansNom> updateEtatNotifAgentChef( @RequestBody NotificationEntiteSansNom Ag) {
 	  
-	     Optional<Notification> AgData = dao.findById(Ag.getId_notif());
+	     Optional<NotificationEntiteSansNom> AgData = dao2.findById(Ag.getId_notif());
 	     System.out.println(Ag.getId_notif());
 	    if (AgData.isPresent()) {
-	    	Notification agg = AgData.get();
+	    	NotificationEntiteSansNom agg = AgData.get();
 	   agg.setEtat_notif_agent("O");
 	      
-	     return new ResponseEntity<>(dao.save(agg), HttpStatus.OK);
+	     return new ResponseEntity<>(dao2.save(agg), HttpStatus.OK);
 	    } else {
 	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    } }
@@ -113,23 +117,27 @@ NotificationEntiteSansNomdao dao2;
 	 @CrossOrigin
 	  @PutMapping("/updateEtatNotifAgent")
 		 
-	  public ResponseEntity<Notification> updateEtatNotifAgent( @RequestBody Notification Ag) {
+	  public ResponseEntity<NotificationEntiteSansNom> updateEtatNotifAgent( @RequestBody NotificationEntiteSansNom Ag) {
 	  
-	     Optional<Notification> AgData = dao.findById(Ag.getId_notif());
+	     Optional<NotificationEntiteSansNom> AgData = dao2.findById(Ag.getId_notif());
 	     System.out.println(Ag.getId_notif());
 	    if (AgData.isPresent()) {
-	    	Notification agg = AgData.get();
+	    	NotificationEntiteSansNom agg = AgData.get();
 	   agg.setEtat_notif_agent("N");
 	      
-	     return new ResponseEntity<>(dao.save(agg), HttpStatus.OK);
+	     return new ResponseEntity<>(dao2.save(agg), HttpStatus.OK);
 	    } else {
 	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    } }
 	 @GetMapping("/gethistoriquenotification/{mat}/{cod}")
 	 public List <Notification> gethistoriquenotification(@PathVariable("mat")String mat,@PathVariable("cod")String cod){
 		return dao.gethistoriquenotification(mat, cod);
-		 
-		 
-		 
+
+	 }
+	 
+	 @GetMapping("/getNotificationEvent")
+	 
+	 public List<Notification> getEventNotification(){
+		 return dao.getEventNotification();
 	 }
 }
